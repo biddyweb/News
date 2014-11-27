@@ -1,9 +1,9 @@
 package com.cwsse.news.fragment;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -11,15 +11,19 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import com.cwsse.news.R;
 import com.cwsse.news.adapter.NewsAdapter;
 import com.cwsse.news.bean.NewsEntity;
 import com.cwsse.news.config.Constants;
+import com.cwsse.news.view.WebViewActivity;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 public class NewsFragment extends Fragment {
 	Activity activity;
@@ -27,7 +31,7 @@ public class NewsFragment extends Fragment {
 	ListView mListView;
 	NewsAdapter mAdapter;
 	ImageView detail_loading;
-	private ImageView news_iv_bigpic;
+	private PullToRefreshListView pull_refresh_list;
 	public final static int SET_NEWSLIST = 0;
 
 	@Override
@@ -73,24 +77,37 @@ public class NewsFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = LayoutInflater.from(getActivity()).inflate(R.layout.news_fragment, null);
-		news_iv_bigpic = (ImageView) view.findViewById(R.id.news_iv_bigpic);
-		mListView = (ListView) view.findViewById(R.id.mListView);
-		// List<String> ls = new ArrayList<String>();
-		// ls.add("ljjljl");
-		// ls.add("ljjljl");
-		// ls.add("ljjljl");
-		// ls.add("ljjljl");
-		// ls.add("ljjljl");
-		// ArrayAdapter<String> a = new ArrayAdapter<String>(getActivity(),
-		// android.R.layout.simple_spinner_item, ls);
-		// mListView.setAdapter(a);
+		pull_refresh_list = (PullToRefreshListView) view.findViewById(R.id.pull_refresh_list);
+		mListView = pull_refresh_list.getRefreshableView();
 		mAdapter = new NewsAdapter(activity, newsList);
+		BigPicRotate();
 		mListView.setAdapter(mAdapter);
+		setListener();
 		return view;
 	}
 
 	private void initData() {
 		newsList = Constants.getNewsList();
+	}
+
+	private void BigPicRotate() {
+		LayoutInflater from = LayoutInflater.from(activity);
+		View v = from.inflate(R.layout.bigpicrotate, null);
+		mListView.addHeaderView(v);
+	}
+
+	private void setListener() {
+		mListView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> adapterview, View view, int i, long l) {
+				String url = newsList.get(i).getUrl();
+				Intent intent = new Intent();
+				intent.putExtra(Constants.URL, url);
+				intent.setClass(activity, WebViewActivity.class);
+				activity.startActivity(intent);
+			}
+		});
 	}
 
 	Handler handler = new Handler() {

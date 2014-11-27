@@ -86,12 +86,9 @@ public class NewsAdapter extends BaseAdapter {
 		NewsEntity news = getItem(position);
 		mHolder.item_title.setText(news.getTitle());
 		mHolder.item_source.setText(news.getSource());
-		mHolder.comment_count.setText("评论" + news.getCommentNum());
 		mHolder.publish_time.setText(news.getPublishTime() + "小时前");
 		List<String> imgUrlList = news.getPicList();
-		// mHolder.popicon.setVisibility(View.VISIBLE);
-		// mHolder.comment_count.setVisibility(View.VISIBLE);
-		// mHolder.right_padding_view.setVisibility(View.VISIBLE);
+		mHolder.right_padding_view.setVisibility(View.VISIBLE);
 		if (imgUrlList != null && imgUrlList.size() != 0) {
 			if (imgUrlList.size() == 1) {
 				mHolder.item_image_layout.setVisibility(View.GONE);
@@ -100,9 +97,8 @@ public class NewsAdapter extends BaseAdapter {
 					mHolder.large_image.setVisibility(View.VISIBLE);
 					mHolder.right_image.setVisibility(View.GONE);
 					imageLoader.displayImage(imgUrlList.get(0), mHolder.large_image, options);
-					// mHolder.popicon.setVisibility(View.GONE);
-					// mHolder.comment_count.setVisibility(View.GONE);
-					// mHolder.right_padding_view.setVisibility(View.GONE);
+					mHolder.comment_count.setVisibility(View.GONE);
+					mHolder.right_padding_view.setVisibility(View.GONE);
 				} else {
 					mHolder.large_image.setVisibility(View.GONE);
 					mHolder.right_image.setVisibility(View.VISIBLE);
@@ -120,8 +116,8 @@ public class NewsAdapter extends BaseAdapter {
 				imageLoader.displayImage(imgUrlList.get(2), mHolder.item_image_2, options);
 			}
 		} else {
-			// mHolder.right_image.setVisibility(View.GONE);
-			// mHolder.item_image_layout.setVisibility(View.GONE);
+			mHolder.right_image.setVisibility(View.GONE);
+			mHolder.item_image_layout.setVisibility(View.GONE);
 		}
 		// 判断该新闻是否是特殊标记的，推广等，为空就是新闻
 		if (!TextUtils.isEmpty(news.getLocal())) {
