@@ -4,10 +4,15 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <ImageView
-        android:id="@+id/bigpicrotate_iv"
+    <!-- <ImageView -->
+    <!-- android:id="@+id/bigpicrotate_iv" -->
+    <!-- android:layout_width="wrap_content" -->
+    <!-- android:layout_height="wrap_content" -->
+    <!-- android:background="@drawable/a" /> -->
+
+    <com.cwsse.news.weight.MyViewPager
+        android:id="@+id/bigpicrotate_vp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/a" />
+        android:layout_height="150dp" />
 
 </LinearLayout>

@@ -27,8 +27,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.cwsse.news.view.WebViewActivity" >
-        </activity>
+        <activity android:name="com.cwsse.news.view.WebViewActivity" />
+        <activity android:name="com.cwsse.news.view.TestActivity" />
     </application>
 
 </manifest>

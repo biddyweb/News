@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,8 +23,7 @@ import com.cwsse.news.R;
 import com.cwsse.news.adapter.NewsAdapter;
 import com.cwsse.news.bean.NewsEntity;
 import com.cwsse.news.config.Constants;
-import com.cwsse.news.view.WebViewActivity;
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.cwsse.news.view.TestActivity;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 public class NewsFragment extends Fragment {
@@ -33,6 +34,11 @@ public class NewsFragment extends Fragment {
 	ImageView detail_loading;
 	private PullToRefreshListView pull_refresh_list;
 	public final static int SET_NEWSLIST = 0;
+	View bigpicrotate;
+	ViewPager bigpicrotate_vp;
+	// 图片ID资源
+	int[] imageIDs = new int[] { R.drawable.b, R.drawable.a };
+	private ImageView[] mImageViews;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -88,12 +94,22 @@ public class NewsFragment extends Fragment {
 
 	private void initData() {
 		newsList = Constants.getNewsList();
+		// 将图片装载到数组中
+		mImageViews = new ImageView[imageIDs.length];
+		for (int i = 0; i < imageIDs.length; i++) {
+			ImageView imageView = new ImageView(activity);
+			mImageViews[i] = imageView;
+			imageView.setBackgroundResource(imageIDs[i]);
+		}
 	}
 
 	private void BigPicRotate() {
 		LayoutInflater from = LayoutInflater.from(activity);
-		View v = from.inflate(R.layout.bigpicrotate, null);
-		mListView.addHeaderView(v);
+		bigpicrotate = from.inflate(R.layout.bigpicrotate, null);
+		bigpicrotate_vp = (ViewPager) bigpicrotate.findViewById(R.id.bigpicrotate_vp);
+		VPadapter vp = new VPadapter();
+		bigpicrotate_vp.setAdapter(vp);
+		mListView.addHeaderView(bigpicrotate);
 	}
 
 	private void setListener() {
@@ -104,7 +120,7 @@ public class NewsFragment extends Fragment {
 				String url = newsList.get(i).getUrl();
 				Intent intent = new Intent();
 				intent.putExtra(Constants.URL, url);
-				intent.setClass(activity, WebViewActivity.class);
+				intent.setClass(activity, TestActivity.class);
 				activity.startActivity(intent);
 			}
 		});
@@ -126,4 +142,32 @@ public class NewsFragment extends Fragment {
 			super.handleMessage(msg);
 		}
 	};
+
+	private class VPadapter extends PagerAdapter {
+
+		@Override
+		public int getCount() {
+			return imageIDs.length;
+		}
+
+		@Override
+		public boolean isViewFromObject(View arg0, Object arg1) {
+			return arg0 == arg1;
+		}
+
+		/**
+		 * 载入图片进去，用当前的position 除以 图片数组长度取余数是关键
+		 */
+		@Override
+		public Object instantiateItem(View container, int position) {
+			((ViewPager) container).addView(mImageViews[position]);
+			return mImageViews[position];
+		}
+
+		@Override
+		public void destroyItem(View container, int position, Object object) {
+			((ViewPager) container).removeView(mImageViews[position]);
+		}
+	}
+
 }
