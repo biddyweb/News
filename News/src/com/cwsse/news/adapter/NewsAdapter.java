@@ -31,7 +31,7 @@ public class NewsAdapter extends BaseAdapter {
 	Activity activity;
 	LayoutInflater inflater = null;
 	protected ImageLoader imageLoader = ImageLoader.getInstance();
-	DisplayImageOptions options;
+	DisplayImageOptions options ;
 
 	public NewsAdapter(Activity activity, ArrayList<NewsEntity> newsList) {
 		this.activity = activity;
