@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 public class NewsFragmentPagerAdapter extends FragmentPagerAdapter {
 	private ArrayList<Fragment> fragments;
-	private FragmentManager fm;
+	private FragmentManager fm ;
 
 	public NewsFragmentPagerAdapter(FragmentManager fm) {
 		super(fm);
